@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   CheckCircle2,
   Star,
@@ -6,6 +7,7 @@ import {
   CreditCard,
   Truck,
   Repeat,
+  ArrowRight,
 } from "lucide-react";
 
 export default function Index() {
@@ -30,8 +32,7 @@ function HeroSection() {
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center px-4 py-16 md:py-24">
         <div className="space-y-6">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
-            Vista-se para Performar com a{" "}
-            <span className="text-primary">Move Mode Fit</span>
+            Eleve seu Treino com Estilo — <span className="text-primary">Move Mode Fit</span>
           </h1>
           <p className="text-lg text-gray-600 max-w-xl">
             Moda fitness feminina com qualidade premium, conforto e estilo para
@@ -123,9 +124,10 @@ function ProductsSection() {
       price: "R$83,14",
       oldPrice: "R$199,99",
       discount: "-58% OFF",
-      img: "https://cdn.builder.io/api/v1/image/assets%2Fb5e820d90c4545ddac70e63bba740e23%2F77d6d1fdcec7452981928a36b3848f14?format=webp&width=800",
+      img: "https://cdn.builder.io/api/v1/image/assets%2Fb5e820d90c4545ddac70e63bba740e23%2Fe1c57327bed54782855ab75a4ca00c3e?format=webp&width=800",
       url: "https://movemodefit.com.br",
       tag: "Oferta",
+      featured: true,
     },
     {
       name: "Mini Stepper Silencioso com Pedais – Equipamento de Escalada para Exercícios em Casa, Fitness e Cardio",
@@ -146,7 +148,7 @@ function ProductsSection() {
   ] as const;
 
   return (
-    <section id="produtos" className="py-16 md:py-24">
+    <section id="produtos" className="py-16 md:py-24 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="flex items-end justify-between mb-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
@@ -159,46 +161,45 @@ function ProductsSection() {
             className="hidden md:inline-block"
           >
             <Button variant="secondary" className="rounded-full">
-              Ver todos
+              Visitar loja
             </Button>
           </a>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {products.map((p, i) => (
             <a
               key={i}
               href={p.url}
               target="_blank"
               rel="noreferrer"
-              className="group flex h-full flex-col rounded-2xl overflow-hidden bg-white ring-1 ring-gray-100 shadow-sm hover:shadow-md transition"
+              className={cn(
+                "group flex h-full flex-col rounded-3xl overflow-hidden bg-white ring-1 ring-gray-100 shadow-sm transition transform hover:-translate-y-1 hover:shadow-lg hover:ring-primary/30"
+              )}
             >
               <div className="aspect-[4/5] overflow-hidden">
                 <img
                   src={p.img}
                   alt={p.name}
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
               <div className="p-4 flex flex-1 flex-col">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">
-                    {p.discount ?? p.tag}
-                  </span>
-                  <span className="text-sm text-gray-500">até 12x</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">
+                      {p.discount ?? p.tag}
+                    </span>
+                    {(p as any).featured && (
+                      <span className="text-xs font-semibold text-white bg-primary px-2 py-1 rounded-full">Destaque</span>
+                    )}
+                  </div>
                 </div>
-                <h3 className="font-semibold leading-tight line-clamp-2 min-h-[3.25rem]">
+                <h3 className="font-semibold leading-tight">
                   {p.name}
                 </h3>
-                <div className="mt-1 flex items-baseline gap-2">
-                  {p.oldPrice && (
-                    <span className="text-sm text-gray-500 line-through">
-                      {p.oldPrice}
-                    </span>
-                  )}
-                  <span className="text-lg font-extrabold">{p.price}</span>
-                </div>
+                <p className="mt-1 text-sm text-gray-600">Conforto, qualidade e estilo para sua rotina ativa.</p>
                 <Button className="mt-auto w-full rounded-full bg-primary text-white hover:bg-primary/90">
-                  Comprar
+                  Ver na loja <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
             </a>
@@ -281,11 +282,10 @@ function OfferSection() {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-4xl text-center mb-10 md:mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
-            Compre com Confiança
+            Pronta para se mover com estilo?
           </h2>
           <p className="mt-4 text-white/80">
-            Pagamento seguro, envio rápido e política de troca simples.
-            Aproveite as ofertas da semana!
+            Conheça a loja oficial Move Mode Fit e descubra peças que unem performance, conforto e atitude.
           </p>
         </div>
 
@@ -295,24 +295,22 @@ function OfferSection() {
               <div className="flex items-center gap-3">
                 <Lock className="h-6 w-6 text-primary" />
                 <div>
-                  <p className="font-semibold">Ambiente 100% seguro</p>
-                  <p className="text-sm text-gray-600">
-                    Seus dados estão protegidos
-                  </p>
+                  <p className="font-semibold">Compra segura</p>
+                  <p className="text-sm text-gray-600">Site oficial protegido</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Truck className="h-6 w-6 text-primary" />
                 <div>
-                  <p className="font-semibold">Envio para todo Brasil</p>
-                  <p className="text-sm text-gray-600">Rastreio e agilidade</p>
+                  <p className="font-semibold">Envio rápido</p>
+                  <p className="text-sm text-gray-600">Pra todo o Brasil</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Repeat className="h-6 w-6 text-primary" />
                 <div>
-                  <p className="font-semibold">Troca fácil em 7 dias</p>
-                  <p className="text-sm text-gray-600">Sem complicações</p>
+                  <p className="font-semibold">Troca simples</p>
+                  <p className="text-sm text-gray-600">Atendimento humanizado</p>
                 </div>
               </div>
             </div>
@@ -323,13 +321,9 @@ function OfferSection() {
                 rel="noreferrer"
               >
                 <Button className="rounded-full h-14 px-8 text-base bg-primary text-primary-foreground hover:bg-primary/90 animate-cta-pulse transition-transform hover:scale-[1.02]">
-                  COMPRAR AGORA
+                  VISITAR LOJA OFICIAL
                 </Button>
               </a>
-              <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600">
-                <CreditCard className="h-4 w-4" />
-                <span>Pix • Boleto • Cartão em até 12x</span>
-              </div>
             </div>
           </div>
         </div>

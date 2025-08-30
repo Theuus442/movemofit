@@ -31,7 +31,7 @@ function Header() {
             Produtos
           </a>
           <a href="#comprar" className="hover:text-primary transition-colors">
-            Comprar
+            Loja
           </a>
           <a
             href="https://movemodefit.com.br"
@@ -43,9 +43,9 @@ function Header() {
           </a>
         </nav>
         <div className="flex items-center gap-2">
-          <a href="#comprar" className="hidden sm:block">
+          <a href="https://movemodefit.com.br" target="_blank" rel="noreferrer" className="hidden sm:block">
             <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-5 py-2">
-              Comprar agora
+              Visitar loja
             </Button>
           </a>
         </div>

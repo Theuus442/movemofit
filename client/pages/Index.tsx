@@ -8,16 +8,23 @@ import {
   Truck,
   Repeat,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import { useEffect, useState } from "react";
 
 export default function Index() {
   return (
     <div className="bg-white text-gray-900">
       <HeroSection />
+      <PromoBanner />
+      <NewArrivalsCarousel />
       <BenefitsSection />
       <ProductsSection />
       <TestimonialsSection />
       <OfferSection />
+      <StickyCta />
     </div>
   );
 }
@@ -28,6 +35,7 @@ function HeroSection() {
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-gray-100" />
         <div className="absolute -top-40 -right-40 h-[520px] w-[520px] rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-fuchsia-500/10 blur-3xl" />
       </div>
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center px-4 py-16 md:py-24">
         <div className="space-y-6">
@@ -66,6 +74,143 @@ function HeroSection() {
             alt="Mulher confiante treinando com roupas fitness"
             className="w-full rounded-2xl object-cover shadow-xl"
           />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NewArrivalsCarousel() {
+  const items = [
+    {
+      name: "Mini Stepper Silencioso com Pedais – Equipamento de Escalada",
+      img: "https://cdn.builder.io/api/v1/image/assets%2Fb5e820d90c4545ddac70e63bba740e23%2F5116d9715796423cad3de1ad00d79c27?format=webp&width=800",
+      url: "https://movemodefit.com.br",
+      tag: "Equipamento",
+    },
+    {
+      name: "Kit 5 Bermudas Moletom Masculinas: Conforto e Versatilidade para Treino e Dia a Dia",
+      img: "https://cdn.builder.io/api/v1/image/assets%2Fb5e820d90c4545ddac70e63bba740e23%2Fd7167b02cd604a25b908f0acf52b3732?format=webp&width=800",
+      url: "https://movemodefit.com.br",
+      tag: "Kit",
+    },
+    {
+      name: "Tapete de Guia de Posição para Agachamento",
+      img: "https://cdn.builder.io/api/v1/image/assets%2Fb5e820d90c4545ddac70e63bba740e23%2Fa3eb95c7199e4964919cb36b36275152?format=webp&width=800",
+      url: "https://movemodefit.com.br",
+      tag: "Acessórios",
+    },
+    {
+      name: "Toalha Esportiva de Resfriamento",
+      img: "https://cdn.builder.io/api/v1/image/assets%2Fb5e820d90c4545ddac70e63bba740e23%2F5731c6c707ce46fabf7ba47a48fe78cb?format=webp&width=800",
+      url: "https://movemodefit.com.br",
+      tag: "Acessórios",
+    },
+  ];
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: true, dragFree: true, containScroll: "trimSnaps" });
+  const [selected, setSelected] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
+  const scrollNext = () => emblaApi && emblaApi.scrollNext();
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelected(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    onSelect();
+    return () => emblaApi.off("select", onSelect);
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi || isHovered) return;
+    const id = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 4000);
+    return () => clearInterval(id);
+  }, [emblaApi, isHovered]);
+
+  return (
+    <section className="py-10">
+      <div className="container mx-auto px-4">
+        <div className="flex items-end justify-between mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold">Novidades</h2>
+          <div className="hidden md:flex gap-2">
+            <Button variant="secondary" size="sm" className="rounded-full" onClick={scrollPrev}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="secondary" size="sm" className="rounded-full" onClick={scrollNext}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        <div className="overflow-hidden" ref={emblaRef} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+          <div className="flex gap-6">
+            {items.map((p, i) => (
+              <a
+                key={i}
+                href={p.url}
+                target="_blank"
+                rel="noreferrer"
+                className="group min-w-[80%] sm:min-w-[60%] md:min-w-[45%] lg:min-w-[30%] flex h-full flex-col rounded-3xl overflow-hidden bg-white ring-1 ring-gray-100 shadow-sm transition transform hover:-translate-y-1 hover:shadow-lg hover:ring-primary/30"
+              >
+                <div className="aspect-[4/5] overflow-hidden">
+                  <img src={p.img} alt={p.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                </div>
+                <div className="p-4 flex flex-1 flex-col">
+                  <div className="mb-2">
+                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">{p.tag}</span>
+                  </div>
+                  <h3 className="font-semibold leading-tight">{p.name}</h3>
+                  <Button className="mt-auto w-full rounded-full bg-primary text-white hover:bg-primary/90">
+                    Ver na loja <ArrowRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+        <div className="mt-4 flex justify-center gap-2">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Ir para slide ${i + 1}`}
+              onClick={() => emblaApi && emblaApi.scrollTo(i)}
+              className={cn(
+                "h-2 w-2 rounded-full transition-colors",
+                selected === i ? "bg-primary" : "bg-gray-300 hover:bg-gray-400"
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PromoBanner() {
+  return (
+    <section className="relative overflow-hidden">
+      <div className="container mx-auto px-4">
+        <div className="rounded-3xl bg-gradient-to-r from-primary to-fuchsia-600 text-white px-6 py-8 md:px-10 md:py-10 shadow-lg">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <p className="uppercase tracking-widest text-white/80 text-xs md:text-sm">Novidades da semana</p>
+              <h3 className="text-2xl md:text-3xl font-extrabold mt-1">Lançamentos que unem performance e estilo</h3>
+              <p className="text-white/90 mt-2 max-w-2xl">
+                Descubra peças pensadas para acompanhar seu ritmo: tecidos respiráveis, modelagens confortáveis e visual marcante.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <a href="#produtos">
+                <Button className="rounded-full h-12 px-6 bg-white text-primary hover:bg-white/90">Ver coleção</Button>
+              </a>
+              <a href="https://movemodefit.com.br" target="_blank" rel="noreferrer">
+                <Button className="rounded-full h-12 px-6 bg-black/20 text-white hover:bg-black/30">Visitar loja</Button>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -128,13 +273,6 @@ function ProductsSection() {
       url: "https://movemodefit.com.br",
       tag: "Oferta",
       featured: true,
-    },
-    {
-      name: "Mini Stepper Silencioso com Pedais – Equipamento de Escalada para Exercícios em Casa, Fitness e Cardio",
-      price: "R$1.924,54",
-      img: "https://cdn.builder.io/api/v1/image/assets%2Fb5e820d90c4545ddac70e63bba740e23%2F5116d9715796423cad3de1ad00d79c27?format=webp&width=800",
-      url: "https://movemodefit.com.br",
-      tag: "Equipamento",
     },
     {
       name: "Rolo Meia Roda de Espuma – Yoga, Pilates, Equilíbrio e Massagem Muscular",
@@ -329,5 +467,36 @@ function OfferSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+function StickyCta() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setShow(y > 600);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  if (!show) return null;
+  return (
+    <div className="fixed bottom-3 left-0 right-0 z-[60] px-4">
+      <div className="mx-auto max-w-xl rounded-2xl bg-white/90 backdrop-blur shadow-lg ring-1 ring-gray-200 flex items-center justify-between gap-3 px-4 py-3">
+        <p className="text-sm font-medium text-gray-900">Pronta para garantir o seu? Aproveite agora.</p>
+        <div className="flex items-center gap-2">
+          <a href="https://movemodefit.com.br" target="_blank" rel="noreferrer">
+            <Button className="rounded-full h-10 px-5 bg-primary text-white hover:bg-primary/90">Visitar loja</Button>
+          </a>
+          <button aria-label="Fechar barra" onClick={() => setShow(false)} className="text-sm text-gray-500 hover:text-gray-700">
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

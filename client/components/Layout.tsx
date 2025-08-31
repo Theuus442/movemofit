@@ -1,5 +1,4 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { Link, Outlet } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export default function Layout() {
